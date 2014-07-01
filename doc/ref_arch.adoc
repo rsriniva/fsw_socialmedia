@@ -6,40 +6,71 @@ image::images/rhheader.png[width=900]
 
 :numbered!:
 [abstract]
-== JBoss GPE Reference Architecture:  Template
+== JBoss GPE Reference Architecture:  Social Media in Fuse Service Works
 
 :numbered:
 
 == Abstract
 
+The present reference architecture demonstrates how to pull social media feeds into FSW. The first implementation completed is the one for Twitter. 
+
 == Overview
 
+FSW is started with a system property that defines the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. A component service is defined that uses a HTTP binding to connect and pull tweets. Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
+
 == Pre-Requisites
+
+You need the camel twitter component installed in FSW to be able to pull tweets for Twitter keywords. The version of Camel (2.10) that is shipped with the FSW 6.0 GA does not work since the API it uses has been deprecated. For the purposes of this reference architecture, we will use a special version of the camel twitter component that is built with the Twitter 1.1 API and backported to Camel 2.10. We also need the twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar libraries.
 
 == Procedure
 * For the purposes of this documentation, the name _$REF_ARCH_HOME_ refers to the root directory of this reference architecture.
 
+To be able to poll a twitter account and send updates, the application needs to be registered with a Twitter account. This can be done from the http://dev.twitter.com/apps page. Be sure to grant read and write rights to the application. Make note of the customer key and secret, and the access token key and secret.
+
+Configuration of switchyard
+
+In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to the section of the switchyard subsystem configuration:
+<extension identifier="org.apache.camel.twitter"/>
+
+Setup the Twitter module in FSW
+
+Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a mmodule.xml file that looks like:
+
+<module xmlns="urn:jboss:module:1.0" name="org.apache.camel.twitter">
+    <resources>
+        <resource-root path="camel-twitter-2.10.0.redhat-60024-1.jar"/>
+        <resource-root path="twitter4j-core-3.0.5.jar"/>
+        <resource-root path="twitter4j-stream-3.0.5.jar"/>
+    </resources>
+
+    <dependencies>
+        <module name="org.slf4j"/>
+        <module name="javax.api"/>
+        <module name="org.apache.camel.core"/>
+    </dependencies>
+</module>
+
+In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
+
+-Dtwitter_keyword="<keyword of interest>" -DconsumerKey="<consumer key from Twitter>" -DconsumerSecret="<consumer secret from Twitter>" -DaccessToken="<Twitter access token>" -DaccessTokenSecret="<Twitter access token secret>"
+
+If you tail the server.log, you will see tweets on your subject, like:
+
+14:28:13,980 INFO  [org.jboss.as.server] (DeploymentScanner-threads - 2) JBAS018559: Deployed "fsw_socialmedia_serviceTier.jar" (runtime-name : "fsw_socialmedia_serviceTier.jar")
+14:28:15,361 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Tue Jul 01 12:12:33 PDT 2014 (dezateraxeq) #MEXICOvsCROACIA Игра World of Tanks вышла для iPad и iPhone
+14:28:15,364 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Tue Jul 01 12:10:00 PDT 2014 (tiethertua77) #MEXICOvsCROACIA Спектакль омского «Арлекина» победил на фестивале в Екатеринбурге
+14:28:15,366 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Tue Jul 01 08:58:02 PDT 2014 (carlostoficial) Que es esto? @Td_deportes #mundial #Brasil #mexicovscroacia http://t.co/5Zyak4dCvh
+14:28:15,368 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Tue Jul 01 06:32:07 PDT 2014 (jperna_77) “@Hyundai: A little celebration GIF for all you Team Mexico fans. #BecauseFutbol #MEXICOvsCROACIA http://t.co/iMvH7CNuEO” yooooo @2Tbell4 ðð
+14:28:15,370 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Tue Jul 01 01:39:11 PDT 2014 (spysreni1976) Назван лучший фильм 36-го Московского Международного кинофестиваля #MEXICOvsCROACIA
+14:28:15,372 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Mon Jun 30 14:34:42 PDT 2014 (hectorin226) Que buena foto! #estadiocastelao #Méxicovscroacia #brasil2014 http://t.co/VTwpI0zCfw
+14:28:15,374 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Mon Jun 30 11:09:10 PDT 2014 (cycydyxatyp) #MEXICOvsCROACIA К 2018 году рынок игр вырастет до 100 миллиардов долларов
+14:28:15,376 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Mon Jun 30 10:41:53 PDT 2014 (fortstarus1991) #MEXICOvsCROACIA Ростелеком выплатит дивиденды за 2013 год на 8.824 млрд руб
+
 == Performance Testing
-* JMeter is used to drive testing of the reference architecture.
-* You do not need to download a seperate JMeter binary nor source distribution
-* Instead, JMeter will be downloaded, installed and appropriately configured as part of the configuration found in $REF_ARCH_HOME/loadtest
-* jmeter maven plugin
-** Notice use of the com.lazerycode.jmeter:jmeter-maven-plugin in _$REF_ARCH_HOME/loadtest/pom.xml_ 
-** This maven plugin downloads, installs and appropriately configures JMeter
-** This maven plugin is also used to drive test scenarios
-* ref_arch.jmx
-** A sample default jmeter load test definition file is included in: $REF_ARCH_HOME/loadtest/src/test/jmeter/ref_arch.jmx
-** This jmeter load test definition file can be viewed and manipulated via the JMeter GUI by:
-*** cd $REF_ARCH_HOME/loadtest
-** Notice that the default, OOB configuration is to spawn a single client that invokes a single test case
-** ./jmeter_gui.sh
-* Java Sampler
-** Also included is an example Java _Sampler_ at:  $REF_ARCH_HOME/loadtest/src/test/java/com/redhat/gpe/refarch/ref_arch_template/loadtest/ExampleJMeterClient.java
-** The use of a JMeter _sampler_ class is optional
-** cd $REF_ARCH_HOME/loadtest
-** mvn clean verify
+Using the service metrics in the JBoss Management console, a rate of 850 tweets/second.
 
 == To-Do
-. resolve this problem
-. resolve that problem
+. Update the OAuth2 parameters to use personal app insteam to camel-tweet
+. Add Facebook and Datasift versions of the social media architecture
+. After running the test for a certain number of tweets, you will see the Twitter rate-limiting message indicating that has been exceeded. You will have to wait for 40-50 seconds before the rate limit permits more feeds to be pulled into FSW.
 =======
