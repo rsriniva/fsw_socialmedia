@@ -30,7 +30,10 @@ To be able to poll a twitter account and send updates, the application needs to 
 Configuration of switchyard
 
 In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to the section of the switchyard subsystem configuration:
+[source]
+---------------------------------------------------------------------------------------------------------------
 <extension identifier="org.apache.camel.twitter"/>
+---------------------------------------------------------------------------------------------------------------
 
 Setup the Twitter module in FSW
 
@@ -55,10 +58,15 @@ Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitte
 
 In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
 
+[source]
+---------------------------------------------------------------------------------------------------------------
 -Dtwitter_keyword="<keyword of interest>" -DconsumerKey="<consumer key from Twitter>" -DconsumerSecret="<consumer secret from Twitter>" -DaccessToken="<Twitter access token>" -DaccessTokenSecret="<Twitter access token secret>"
+---------------------------------------------------------------------------------------------------------------
 
 If you tail the server.log, you will see tweets on your subject, like:
 
+[source]
+---------------------------------------------------------------------------------------------------------------
 14:28:13,980 INFO  [org.jboss.as.server] (DeploymentScanner-threads - 2) JBAS018559: Deployed "fsw_socialmedia_serviceTier.jar" (runtime-name : "fsw_socialmedia_serviceTier.jar")
 14:28:15,361 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Tue Jul 01 12:12:33 PDT 2014 (dezateraxeq) #MEXICOvsCROACIA Игра World of Tanks вышла для iPad и iPhone
 14:28:15,364 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Tue Jul 01 12:10:00 PDT 2014 (tiethertua77) #MEXICOvsCROACIA Спектакль омского «Арлекина» победил на фестивале в Екатеринбурге
@@ -68,6 +76,7 @@ If you tail the server.log, you will see tweets on your subject, like:
 14:28:15,372 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Mon Jun 30 14:34:42 PDT 2014 (hectorin226) Que buena foto! #estadiocastelao #Méxicovscroacia #brasil2014 http://t.co/VTwpI0zCfw
 14:28:15,374 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Mon Jun 30 11:09:10 PDT 2014 (cycydyxatyp) #MEXICOvsCROACIA К 2018 году рынок игр вырастет до 100 миллиардов долларов
 14:28:15,376 INFO  [stdout] (Camel (camel-13) thread #11 - twitter://search) Mon Jun 30 10:41:53 PDT 2014 (fortstarus1991) #MEXICOvsCROACIA Ростелеком выплатит дивиденды за 2013 год на 8.824 млрд руб
+---------------------------------------------------------------------------------------------------------------
 
 == Performance Testing
 Using the service metrics in the JBoss Management console, a rate of 850 tweets/second.
