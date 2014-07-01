@@ -16,18 +16,25 @@ The present reference architecture demonstrates how to pull social media feeds i
 
 == Overview
 
-FSW is started with a system property that defines the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. A component service is defined that uses a HTTP binding to connect and pull tweets. Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
+A FSW component service is created with a HTTP binding that connects to Twitter and pull tweets. The binding looks like
+
+[source]
+---------------------------------------------------------------------------------------------------------------
+ https://api.twitter.com/1.1/search/tweets.json?since_id=24012619984051000&max_id=250126199840518145&result_type=mixed
+---------------------------------------------------------------------------------------------------------------
+
+FSW is started with a system properties for the OAuth2 connection to Twitter and a keyword to listen for tweets. Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
 
 == Pre-Requisites
 
 You need the camel twitter component installed in FSW to be able to pull tweets for Twitter keywords. The version of Camel (2.10) that is shipped with the FSW 6.0 GA does not work since the API it uses has been deprecated. For the purposes of this reference architecture, we will use a special version of the camel twitter component that is built with the Twitter 1.1 API and backported to Camel 2.10. We also need the twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar libraries.
 
 == Procedure
-* For the purposes of this documentation, the name _$REF_ARCH_HOME_ refers to the root directory of this reference architecture.
+* Twitter account set-up
 
 To be able to poll a twitter account and send updates, the application needs to be registered with a Twitter account. This can be done from the http://dev.twitter.com/apps page. Be sure to grant read and write rights to the application. Make note of the customer key and secret, and the access token key and secret.
 
-Configuration of switchyard
+* Configuration in FSW
 
 In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to the section of the switchyard subsystem configuration:
 [source]
@@ -35,7 +42,7 @@ In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to 
 <extension identifier="org.apache.camel.twitter"/>
 ---------------------------------------------------------------------------------------------------------------
 
-Setup the Twitter module in FSW
+* Setup the Twitter module in FSW
 
 Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a module.xml file that looks like:
 
@@ -79,7 +86,7 @@ If you tail the server.log, you will see tweets on your subject, like:
 ---------------------------------------------------------------------------------------------------------------
 
 == Performance Testing
-Using the service metrics in the JBoss Management console, a rate of 850 tweets/second.
+Using the service metrics in the JBoss Management console, a rate of 850 tweets/second was observed.
 
 == To-Do
 . Update the OAuth2 parameters to use personal app insteam to camel-tweet
