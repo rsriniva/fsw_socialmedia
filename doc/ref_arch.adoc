@@ -34,8 +34,10 @@ In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to 
 
 Setup the Twitter module in FSW
 
-Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a mmodule.xml file that looks like:
+Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a module.xml file that looks like:
 
+[source]
+---------------------------------------------------------------------------------------------------------------
 <module xmlns="urn:jboss:module:1.0" name="org.apache.camel.twitter">
     <resources>
         <resource-root path="camel-twitter-2.10.0.redhat-60024-1.jar"/>
@@ -49,6 +51,7 @@ Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitte
         <module name="org.apache.camel.core"/>
     </dependencies>
 </module>
+---------------------------------------------------------------------------------------------------------------
 
 In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
 
