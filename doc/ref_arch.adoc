@@ -34,7 +34,7 @@ Once the tweets are pulled into FSW, a simple Java bean implementation logs them
 == Pre-Requisites
 
 . Fuse Service Works 6.0.0 environment.
-Can either be local ( in which case follow the {fswinstall}) or in an OpenShift PaaS environment (in which case contact the Red Hat's GPE team for assistance).
+Can either be local ( in which case follow the {fswinstall}) or in an OpenShift PaaS environment (in which case contact Red Hat's GPE team for assistance).
 . git
 . maven 3.0.5 (or greater)
 
@@ -48,11 +48,12 @@ Be sure to grant read and write rights to the application.
 Make note of the customer key and secret, and the access token key and secret.
 
 === Clone this project
+*TO-DO*
 
 === FSW Configuration
 
-. Changes to standalone.xml
-+
+==== Changes to standalone.xml
+
 In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to the section of the switchyard subsystem configuration:
 [source]
 ---------------------------------------------------------------------------------------------------------------
@@ -63,8 +64,11 @@ The addition of the twitter extension should be as follows:
 
 image::images/twitter_extension.png[]
 
-. Addition of new JBoss Modules
-+
+==== Addition of new JBoss Modules
+
+*TO-DO* :  why not just copy the jar libraries and module.xml found in the conf directory of this git project ?
+In which, all that is left to do is to document here the details of these jar libraries and config files
+
 Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. 
 Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. 
 Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a module.xml file that looks like:
@@ -86,18 +90,23 @@ Also, copy the special build of the camel twitter component (camel-twitter-2.10.
 </module>
 ---------------------------------------------------------------------------------------------------------------
 
-. Addition of Java system properties
-In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. 
-This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
+==== Addition of Java system properties
 
+*TO-DO*:  add system properties through JBoss Management Console (easier for users of FSW cartridge )
+
+In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. 
 
 [source]
 ---------------------------------------------------------------------------------------------------------------
 -Dtwitter_keyword="<keyword of interest>" -DconsumerKey="<consumer key from Twitter>" -DconsumerSecret="<consumer secret from Twitter>" -DaccessToken="<Twitter access token>" -DaccessTokenSecret="<Twitter access token secret>"
 ---------------------------------------------------------------------------------------------------------------
 
+This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
+
 == Build and Deploy _serviceTier_ App
-[TO-DO] :  elaborate on _serviceTier_ project:  ie; switchyard xml, add image of application diagram, java classes/interfaces,
+[TO-DO] :  
+- elaborate on _serviceTier_ project:  ie; switchyard xml, add image of application diagram, java classes/interfaces
+- provide instructions for building of project and deployment through JBoss Management console
 
 === Validate consumption of social media feeds
 
