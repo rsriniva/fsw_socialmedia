@@ -1,6 +1,7 @@
 :data-uri:
 :toc2:
 :rhtlink: link:https://www.redhat.com[Red Hat]
+:fswinstall: link:https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse_Service_Works/6/html-single/Installation_Guide/index.html[FSW install instructions]
 
 image::images/rhheader.png[width=900]
 
@@ -12,7 +13,7 @@ image::images/rhheader.png[width=900]
 
 == Abstract
 
-The present reference architecture demonstrates how to pull social media feeds into FSW. The first implementation completed is the one for Twitter. 
+This reference architecture demonstrates how to pull and process social media feeds into FSW.
 
 == Overview
 
@@ -23,28 +24,47 @@ A FSW component service is created with a HTTP binding that connects to Twitter 
  https://api.twitter.com/1.1/search/tweets.json?since_id=24012619984051000&max_id=250126199840518145&result_type=mixed
 ---------------------------------------------------------------------------------------------------------------
 
-FSW is started with a system properties for the OAuth2 connection to Twitter and a keyword to listen for tweets. Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
+FSW is started with a system properties that defines the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. 
+A component service is defined that uses a HTTP binding to connect and pull tweets.
+Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
 
 == Pre-Requisites
 
-You need the camel twitter component installed in FSW to be able to pull tweets for Twitter keywords. The version of Camel (2.10) that is shipped with the FSW 6.0 GA does not work since the API it uses has been deprecated. For the purposes of this reference architecture, we will use a special version of the camel twitter component that is built with the Twitter 1.1 API and backported to Camel 2.10. We also need the twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar libraries.
+. Fuse Service Works 6.0.0 environment.
+Can either be local ( in which case follow the {fswinstall}) or in an OpenShift PaaS environment (in which case contact the Red Hat's GPE team for assistance).
+. git
+. maven 3.0.5 (or greater)
 
 == Procedure
-* Twitter account set-up
 
-To be able to poll a twitter account and send updates, the application needs to be registered with a Twitter account. This can be done from the http://dev.twitter.com/apps page. Be sure to grant read and write rights to the application. Make note of the customer key and secret, and the access token key and secret.
+=== Twitter account set - up
 
-* Configuration in FSW
+To be able to poll a twitter account and send updates, the application needs to be registered with a Twitter account. 
+This can be done from the http://dev.twitter.com/apps page. 
+Be sure to grant read and write rights to the application. 
+Make note of the customer key and secret, and the access token key and secret.
 
+=== Clone this project
+
+=== FSW Configuration
+
+. Changes to standalone.xml
++
 In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to the section of the switchyard subsystem configuration:
 [source]
 ---------------------------------------------------------------------------------------------------------------
 <extension identifier="org.apache.camel.twitter"/>
 ---------------------------------------------------------------------------------------------------------------
 
-* Setup the Twitter module in FSW
+The addition of the twitter extension should be as follows:
 
-Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a module.xml file that looks like:
+image::images/twitter_extension.png[]
+
+. Addition of new JBoss Modules
++
+Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. 
+Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. 
+Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a module.xml file that looks like:
 
 [source]
 ---------------------------------------------------------------------------------------------------------------
@@ -63,14 +83,22 @@ Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitte
 </module>
 ---------------------------------------------------------------------------------------------------------------
 
-In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
+. Addition of Java system properties
+In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. 
+This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
+
 
 [source]
 ---------------------------------------------------------------------------------------------------------------
 -Dtwitter_keyword="<keyword of interest>" -DconsumerKey="<consumer key from Twitter>" -DconsumerSecret="<consumer secret from Twitter>" -DaccessToken="<Twitter access token>" -DaccessTokenSecret="<Twitter access token secret>"
 ---------------------------------------------------------------------------------------------------------------
 
-If you tail the server.log, you will see tweets on your subject, like:
+== Build and Deploy _serviceTier_ App
+[TO-DO] :  elaborate on _serviceTier_ project:  ie; switchyard xml, add image of application diagram, java classes/interfaces,
+
+=== Validate consumption of social media feeds
+
+If you tail the server.log of your FSW environment, you will see tweets on your subject, like:
 
 [source]
 ---------------------------------------------------------------------------------------------------------------
