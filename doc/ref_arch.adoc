@@ -66,8 +66,8 @@ image::images/twitter_extension.png[]
 
 ==== Addition of new JBoss Modules
 
-*TO-DO* :  why not just copy the jar libraries and module.xml found in the conf directory of this git project ?
-In which, all that is left to do is to document here the details of these jar libraries and config files
+*TO-DO:  why not just copy the jar libraries and module.xml found in the conf directory of this git project ?
+In which, all that is left to do is to document here the details of these jar libraries and config files*
 
 Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. 
 Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. 
@@ -92,7 +92,7 @@ Also, copy the special build of the camel twitter component (camel-twitter-2.10.
 
 ==== Addition of Java system properties
 
-*TO-DO*:  add system properties through JBoss Management Console (easier for users of FSW cartridge )
+*TO-DO:  add system properties through JBoss Management Console (easier for users of FSW cartridge )*
 
 In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. 
 
@@ -105,8 +105,9 @@ This script has the additional system properties needed for the correct authoriz
 
 == Build and Deploy _serviceTier_ App
 [TO-DO] :  
-- elaborate on _serviceTier_ project:  ie; switchyard xml, add image of application diagram, java classes/interfaces
-- provide instructions for building of project and deployment through JBoss Management console
+
+* elaborate on _serviceTier_ project:  ie; switchyard xml, add image of application diagram, java classes/interfaces
+* provide instructions for building of project and deployment through JBoss Management console
 
 === Validate consumption of social media feeds
 
