@@ -109,7 +109,7 @@ This script has the additional system properties needed for the correct authoriz
 * elaborate on _serviceTier_ project:  ie; switchyard xml, add image of application diagram, java classes/interfaces
 * provide instructions for building of project and deployment through JBoss Management console
 
-=== Validate consumption of social media feeds
+== Validate consumption of social media feeds
 
 If you tail the server.log of your FSW environment, you will see tweets on your subject, like:
 
@@ -133,4 +133,5 @@ Using the service metrics in the JBoss Management console, a rate of 850 tweets/
 . Update the OAuth2 parameters to use personal app insteam to camel-tweet
 . Add Facebook and Datasift versions of the social media architecture
 . After running the test for a certain number of tweets, you will see the Twitter rate-limiting message indicating that has been exceeded. You will have to wait for 40-50 seconds before the rate limit permits more feeds to be pulled into FSW.
+. Persist twitter/facebook feeds in Elastic Search
 =======
