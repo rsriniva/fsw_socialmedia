@@ -13,18 +13,19 @@ image::images/rhheader.png[width=900]
 
 == Abstract
 
-This reference architecture demonstrates how to pull and process social media feeds into FSW.
+This reference architecture demonstrates how to pull and process social media feeds in Red Hat Fuse Service Works (FSW) product.
 
 == Overview
 
-A FSW component service is created with a HTTP binding that connects to Twitter and pull tweets. The binding looks like
+A FSW component service is created with a HTTP binding that connects to Twitter and pulls tweets.
+The Twitter binding will be similar tothe following:
 
 [source]
 ---------------------------------------------------------------------------------------------------------------
  https://api.twitter.com/1.1/search/tweets.json?since_id=24012619984051000&max_id=250126199840518145&result_type=mixed
 ---------------------------------------------------------------------------------------------------------------
 
-FSW is started with a system properties that defines the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. 
+FSW is started with system properties that define the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. 
 A component service is defined that uses a HTTP binding to connect and pull tweets.
 Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
 
