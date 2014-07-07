@@ -29,7 +29,7 @@ FSW is started with system properties that define the authorization and security
 A component service is defined that uses a HTTP binding to connect and pull tweets.
 Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
 
-[red]#TO-DO:  add a UML deployment diagram#
+[red]*TO-DO:  add a UML deployment diagram*
 
 == Pre-Requisites
 
