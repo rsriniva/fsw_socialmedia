@@ -18,7 +18,7 @@ This reference architecture demonstrates how to pull and process social media fe
 == Overview
 
 A FSW component service is created with a HTTP binding that connects to Twitter and pulls tweets.
-The Twitter binding will be similar tothe following:
+The Twitter binding will be similar to the following:
 
 [source]
 ---------------------------------------------------------------------------------------------------------------
@@ -28,6 +28,8 @@ The Twitter binding will be similar tothe following:
 FSW is started with system properties that define the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. 
 A component service is defined that uses a HTTP binding to connect and pull tweets.
 Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
+
+TO-DO:  add a UML deployment diagram
 
 == Pre-Requisites
 
