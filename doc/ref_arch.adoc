@@ -43,9 +43,7 @@ Can either be local ( in which case follow the {fswinstall}) or in an OpenShift 
 === Twitter account set - up
 
 To be able to poll a twitter account and send updates, the application needs to be registered with a Twitter account. 
-This can be done from the http://dev.twitter.com/apps page. 
-Be sure to grant read and write rights to the application. 
-Make note of the customer key and secret, and the access token key and secret.
+This can be done from the http://dev.twitter.com/apps page. Click on the Create New App button which takes you the "Create an Application" page. Enter the application details and save. Once the application is created, click on the API Keys tab. Under Application Settings, you will find the consumer key and secret. To obtain the access token and access token secret, click on the Create my Access Token button at the bottom of the page. This will grant the application the necessary privileges and refresh the screen with the token and secret values you need to make a secure connection to Twitter. Make note of the customer key and secret, and the access token key and secret.
 
 === Clone this project
 *TO-DO*
@@ -130,7 +128,6 @@ If you tail the server.log of your FSW environment, you will see tweets on your 
 Using the service metrics in the JBoss Management console, a rate of 850 tweets/second was observed.
 
 == To-Do
-. Update the OAuth2 parameters to use personal app insteam to camel-tweet
 . Add Facebook and Datasift versions of the social media architecture
 . After running the test for a certain number of tweets, you will see the Twitter rate-limiting message indicating that has been exceeded. You will have to wait for 40-50 seconds before the rate limit permits more feeds to be pulled into FSW.
 . Persist twitter/facebook feeds in Elastic Search
