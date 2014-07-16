@@ -46,9 +46,12 @@ To be able to poll a twitter account and send updates, the application needs to 
 This can be done from the http://dev.twitter.com/apps page. Click on the Create New App button which takes you the "Create an Application" page. Enter the application details and save. Once the application is created, click on the API Keys tab. Under Application Settings, you will find the consumer key and secret. To obtain the access token and access token secret, click on the Create my Access Token button at the bottom of the page. This will grant the application the necessary privileges and refresh the screen with the token and secret values you need to make a secure connection to Twitter. Make note of the customer key and secret, and the access token key and secret.
 
 === Clone this project
-*TO-DO*
 
-=== FSW Configuration
+On your local machine, navigate to your development directory and run:
+
+%git clone https://github.com/jboss-gpe-ref-archs/fsw_socialmedia.git
+
+=== FSW Configuration changes to enable Twitter pulls
 
 ==== Changes to standalone.xml
 
@@ -64,48 +67,36 @@ image::images/twitter_extension.png[]
 
 ==== Addition of new JBoss Modules
 
-*TO-DO:  why not just copy the jar libraries and module.xml found in the conf directory of this git project ?
-In which, all that is left to do is to document here the details of these jar libraries and config files*
-
-Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. 
-Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. 
-Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) to this directory and create a module.xml file that looks like:
-
-[source]
----------------------------------------------------------------------------------------------------------------
-<module xmlns="urn:jboss:module:1.0" name="org.apache.camel.twitter">
-    <resources>
-        <resource-root path="camel-twitter-2.10.0.redhat-60024-1.jar"/>
-        <resource-root path="twitter4j-core-3.0.5.jar"/>
-        <resource-root path="twitter4j-stream-3.0.5.jar"/>
-    </resources>
-
-    <dependencies>
-        <module name="org.slf4j"/>
-        <module name="javax.api"/>
-        <module name="org.apache.camel.core"/>
-    </dependencies>
-</module>
----------------------------------------------------------------------------------------------------------------
+Under $JBOSS_HOME/modules/system/layers/soa/org/apache/camel, create the /twitter/main directory. From conf/fsw/modules/system/layers/soa/org/apache/camel/twitter/main/, Copy the twitter4j libraries (twitter4j-core-3.0.5.jar and twitter4j-stream-3.0.5.jar) to this directory. Also, copy the special build of the camel twitter component (camel-twitter-2.10.0.redhat-60024-1.jar) and module.xml to this directory.
 
 ==== Addition of Java system properties
 
-*TO-DO:  add system properties through JBoss Management Console (easier for users of FSW cartridge )*
+Add system properties for the twitter keyword and OAuth2 through JBoss Management Console like:
 
-In order to be able to run this composite, $JBOSS_HOME/bin/standalone.sh with the arguments shown below. 
+image::images/config_sys_prop_jboss_mc.png[]
 
-[source]
----------------------------------------------------------------------------------------------------------------
--Dtwitter_keyword="<keyword of interest>" -DconsumerKey="<consumer key from Twitter>" -DconsumerSecret="<consumer secret from Twitter>" -DaccessToken="<Twitter access token>" -DaccessTokenSecret="<Twitter access token secret>"
----------------------------------------------------------------------------------------------------------------
-
-This script has the additional system properties needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
+These additional system properties are needed for the correct authorization of the Twitter app as well as the keyword we can going to pull tweets for.
 
 == Build and Deploy _serviceTier_ App
-[TO-DO] :  
 
-* elaborate on _serviceTier_ project:  ie; switchyard xml, add image of application diagram, java classes/interfaces
-* provide instructions for building of project and deployment through JBoss Management console
+* serviceTier project:
+
+The following is a diagram of the service composition built for this reference architecture:
+
+image::images/switchyard_dgm.png[]
+
+We add a Camel binding to the service binding to pull the tweets, that looks like:
+
+image::images/camel_binding_config.png[]
+
+The service invoked has a simple bean implementation that outputs the tweet.
+
+* Run %mvn clean install to build the deployment jar. Create a deployment in the JBoss Management Console and deploy it as shown below:
+
+image::images/create_deployment.png[]
+image::images/enable_deployment.png[]
+
+
 
 == Validate consumption of social media feeds
 
