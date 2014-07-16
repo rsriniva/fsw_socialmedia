@@ -17,16 +17,16 @@ This reference architecture demonstrates how to pull and process social media fe
 
 == Overview
 
-A FSW component service is created with a HTTP binding that connects to Twitter and pulls tweets.
+A FSW component service is created with a Camel binding that connects to Twitter and pulls tweets.
 The Twitter binding will be similar to the following:
 
 [source]
 ---------------------------------------------------------------------------------------------------------------
- https://api.twitter.com/1.1/search/tweets.json?since_id=24012619984051000&max_id=250126199840518145&result_type=mixed
+twitter://search?type=polling&keywords=${twitter_keyword}&useSSL=true&consumerKey=${consumerKey}&consumerSecret=${consumerSecret}&accessToken=${accessToken}&accessTokenSecret=${accessTokenSecret}
 ---------------------------------------------------------------------------------------------------------------
 
-FSW is started with system properties that define the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. 
-A component service is defined that uses a HTTP binding to connect and pull tweets.
+FSW is started and configured with system properties that define the authorization and security parameters for an OAuth2 connection to Twitter and a keyword to listen for tweets. 
+A component service is defined that uses a Camel binding to connect and pull tweets.
 Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
 
 [red]*TO-DO:  add a UML deployment diagram*
@@ -55,7 +55,7 @@ On your local machine, navigate to your development directory and run:
 
 ==== Changes to standalone.xml
 
-In $FSW_HOME/standalone/configuration/standalone.xml, add the following line to the section of the switchyard subsystem configuration:
+In $FSW_HOME/standalone/configuration/standalone.xml, add the Camel twitter extension id to the section of the switchyard subsystem configuration:
 [source]
 ---------------------------------------------------------------------------------------------------------------
 <extension identifier="org.apache.camel.twitter"/>
