@@ -29,7 +29,8 @@ FSW is started and configured with system properties that define the authorizati
 A component service is defined that uses a Camel binding to connect and pull tweets.
 Once the tweets are pulled into FSW, a simple Java bean implementation logs them to stdout.
 
-[red]*TO-DO:  add a UML deployment diagram*
+*UML deployment diagram*
+image::images/SocialMedia_depl.png[]
 
 == Pre-Requisites
 
